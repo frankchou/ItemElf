@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "ItemElf",
+    "slug": "itemelf",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#faf6f1"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.itemelf.app",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "使用 Face ID 快速登入 ItemElf",
+        "NSCameraUsageDescription": "拍攝物品照片及掃描 QR Code 加入家族"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#faf6f1"
+      },
+      "package": "com.itemelf.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "允許 ItemElf 使用相機拍攝物品照片及掃描 QR Code。"
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "允許 ItemElf 使用 Face ID 快速登入。"
+        }
+      ],
+      "expo-asset"
+    ],
+    "scheme": "itemelf",
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

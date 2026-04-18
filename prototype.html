@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ItemElf · Hi-fi Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system/tokens.css">
+<style>
+  body { background: #efece5; padding: 40px 20px 80px; }
+  .page-header { max-width: 1200px; margin: 0 auto 28px; }
+  .page-title { font-size: 28px; font-weight: 800; color: #2a211a; margin-bottom: 6px; }
+  .page-sub { font-size: 14px; color: #7a6a5c; }
+  .frames-row { max-width: 1320px; margin: 0 auto; display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; align-items: flex-start; }
+  .frame-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .frame-label { font-size: 12px; color: #7a6a5c; font-weight: 600; letter-spacing: 0.5px; }
+  .ie-screen { height: 100%; display: flex; flex-direction: column; font-family: var(--ie-font); }
+  .ie-screen-header { padding: 60px 16px 10px; display: flex; align-items: center; justify-content: space-between; background: var(--ie-bg); }
+  .ie-screen-title { font-size: 28px; font-weight: 700; color: var(--ie-text); letter-spacing: -0.4px; }
+  .ie-screen-subtitle { font-size: 12px; color: var(--ie-text-muted); margin-top: 2px; }
+  .ie-screen-body { flex: 1; overflow-y: auto; background: var(--ie-bg); }
+  .ie-circle-btn { width: 40px; height: 40px; border-radius: 999px; background: var(--ie-surface); border: 1px solid var(--ie-border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ie-text); }
+
+  .tweaks-panel { position: fixed; bottom: 20px; right: 20px; width: 300px;
+    background: #fff; border-radius: 16px; padding: 16px; z-index: 10000;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.08);
+    font-family: 'Noto Sans TC', sans-serif; display: none; }
+  .tweaks-panel.active { display: block; }
+  .tweaks-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #2a211a; display: flex; align-items: center; justify-content: space-between; }
+  .tweak-row { margin-bottom: 14px; }
+  .tweak-label { font-size: 11px; color: #7a6a5c; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; margin-bottom: 6px; display: block; }
+  .tweak-grid { display: grid; gap: 6px; }
+  .tweak-btn { padding: 8px; border-radius: 8px; background: #f3ece3; border: 1px solid transparent; font-size: 12px; cursor: pointer; color: #2a211a; font-family: inherit; text-align: center; }
+  .tweak-btn.active { background: var(--ie-primary); color: #fff; border-color: var(--ie-primary); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">ItemElf · Hi-fi Prototype</div>
+  <div class="page-sub">家庭物品管理 App — iOS + Android 雙平台 · 點擊 Tab 切換畫面 · 開啟 Tweaks 切換主題/語言/角色</div>
+</div>
+
+<div id="root"></div>
+
+<div class="tweaks-panel" id="tweaks-panel">
+  <div class="tweaks-title">
+    <span>🎛️ Tweaks</span>
+    <button id="tweaks-close" style="background:none;border:0;color:#7a6a5c;cursor:pointer;font-size:18px">×</button>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">主題 Theme</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-theme" data-val="warm">溫暖 Warm</button>
+      <button class="tweak-btn tweak-theme" data-val="playful">活潑 Playful</button>
+      <button class="tweak-btn tweak-theme" data-val="minimal">簡約 Minimal</button>
+      <button class="tweak-btn tweak-theme" data-val="tech">科技 Tech</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">語言 Language</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-lang" data-val="zh">中文</button>
+      <button class="tweak-btn tweak-lang" data-val="en">English</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">畫面 Screen</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-screen" data-val="auth">登入</button>
+      <button class="tweak-btn tweak-screen" data-val="search">搜尋</button>
+      <button class="tweak-btn tweak-screen" data-val="detail">物品詳情</button>
+      <button class="tweak-btn tweak-screen" data-val="add">新增物品</button>
+      <button class="tweak-btn tweak-screen" data-val="expiring">到期提醒</button>
+      <button class="tweak-btn tweak-screen" data-val="family">家族</button>
+      <button class="tweak-btn tweak-screen" data-val="invite">邀請 QR</button>
+      <button class="tweak-btn tweak-screen" data-val="join">加入家族</button>
+      <button class="tweak-btn tweak-screen" data-val="manage">物品管理</button>
+      <button class="tweak-btn tweak-screen" data-val="settings">設定</button>
+      <button class="tweak-btn tweak-screen" data-val="notifs">動態通知</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">搜尋版型 Search UI</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-searchv" data-val="list">列表 List</button>
+      <button class="tweak-btn tweak-searchv" data-val="card">卡片 Card</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">新增流程 Add Flow</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-addv" data-val="single">單頁表單</button>
+      <button class="tweak-btn tweak-addv" data-val="step">分步驟</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">到期提醒版型 Expiry UI</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-expv" data-val="timeline">時間軸</button>
+      <button class="tweak-btn tweak-expv" data-val="badge">Badge 卡片</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">角色 Role</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-role" data-val="owner">創立者</button>
+      <button class="tweak-btn tweak-role" data-val="member">成員</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">視角 View</label>
+    <div class="tweak-grid" style="grid-template-columns:1fr 1fr">
+      <button class="tweak-btn tweak-view" data-val="family">家庭</button>
+      <button class="tweak-btn tweak-view" data-val="personal">個人</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tweak host protocol -->
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "theme": "warm",
+    "lang": "zh",
+    "screen": "search",
+    "searchVariant": "list",
+    "addVariant": "single",
+    "expiringVariant": "timeline",
+    "role": "owner",
+    "view": "family"
+  }/*EDITMODE-END*/;
+  window.__APP_INITIAL = { ...TWEAK_DEFAULTS };
+
+  window.addEventListener('message', (e) => {
+    if (!e.data || !e.data.type) return;
+    if (e.data.type === '__activate_edit_mode') document.getElementById('tweaks-panel').classList.add('active');
+    if (e.data.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('active');
+  });
+  try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch(_) {}
+  document.getElementById('tweaks-close').addEventListener('click', () => {
+    document.getElementById('tweaks-panel').classList.remove('active');
+  });
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="design-system/mock-data.js"></script>
+<script type="text/babel" src="components/ios-frame.jsx"></script>
+<script type="text/babel" src="components/android-frame.jsx"></script>
+<script type="text/babel" src="design-system/components.jsx"></script>
+<script type="text/babel" src="design-system/screens-a.jsx"></script>
+<script type="text/babel" src="design-system/screens-b.jsx"></script>
+<script type="text/babel" src="design-system/screens-c.jsx"></script>
+<script type="text/babel" src="design-system/screens-d.jsx"></script>
+
+<script type="text/babel">
+function ScreenShell({ title, lang, children, noHeader, dark, app, set }) {
+  const onBack = () => set({ screen: 'search' });
+  return (
+    <div className="ie-screen" style={{ background: 'var(--ie-bg)' }}>
+      {!noHeader && (
+        <div className="ie-screen-header">
+          <div>
+            <div className="ie-screen-title">{title}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="ie-circle-btn" onClick={() => set({ screen: 'notifs' })}>
+              <IEIcon name="bell" size={18} />
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="ie-screen-body">{children}</div>
+    </div>
+  );
+}
+
+function App({ platform, dark = false }) {
+  const [app, setApp] = React.useState({
+    ...window.__APP_INITIAL,
+    detailId: null,
+    showInvite: false,
+  });
+  const set = (patch) => {
+    setApp(prev => {
+      const next = { ...prev, ...patch };
+      // persist theme/lang etc
+      const persistKeys = ['theme', 'lang', 'screen', 'searchVariant', 'addVariant', 'expiringVariant', 'role', 'view'];
+      const edits = {};
+      persistKeys.forEach(k => { if (k in patch) edits[k] = patch[k]; });
+      if (Object.keys(edits).length) {
+        try { window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*'); } catch(_) {}
+      }
+      return next;
+    });
+  };
+
+  // Sync theme to <html>
+  React.useEffect(() => { document.documentElement.setAttribute('data-theme', app.theme); }, [app.theme]);
+
+  // Update tweak button active states
+  React.useEffect(() => {
+    const syncBtns = (cls, val) => {
+      document.querySelectorAll('.' + cls).forEach(b => b.classList.toggle('active', b.dataset.val === val));
+    };
+    syncBtns('tweak-theme', app.theme);
+    syncBtns('tweak-lang', app.lang);
+    syncBtns('tweak-screen', app.screen);
+    syncBtns('tweak-searchv', app.searchVariant);
+    syncBtns('tweak-addv', app.addVariant);
+    syncBtns('tweak-expv', app.expiringVariant);
+    syncBtns('tweak-role', app.role);
+    syncBtns('tweak-view', app.view);
+  });
+
+  // Wire tweak buttons (once)
+  React.useEffect(() => {
+    const wire = (cls, key) => {
+      document.querySelectorAll('.' + cls).forEach(b => {
+        b.onclick = () => set({ [key]: b.dataset.val });
+      });
+    };
+    wire('tweak-theme', 'theme');
+    wire('tweak-lang', 'lang');
+    wire('tweak-screen', 'screen');
+    wire('tweak-searchv', 'searchVariant');
+    wire('tweak-addv', 'addVariant');
+    wire('tweak-expv', 'expiringVariant');
+    wire('tweak-role', 'role');
+    wire('tweak-view', 'view');
+  }, []);
+
+  const L = app.lang;
+  const screenTitles = {
+    search:   { zh: '哈囉 大華', en: 'Hi, Dahua' },
+    family:   { zh: '家族', en: 'Family' },
+    manage:   { zh: '物品管理', en: 'Items' },
+    settings: { zh: '設定', en: 'Settings' },
+    notifs:   { zh: '動態通知', en: 'Activity' },
+    expiring: { zh: '到期提醒', en: 'Attention' },
+    join:     { zh: '加入家族', en: 'Join family' },
+  };
+
+  // Figure out what to render
+  let content, showTabBar = true, showHeader = true;
+
+  if (app.screen === 'auth') {
+    content = <IEAuthScreen lang={L} onDone={() => set({ screen: 'search' })} />;
+    showTabBar = false; showHeader = false;
+  } else if (app.detailId) {
+    content = <IEDetailScreen itemId={app.detailId} lang={L} onBack={() => set({ detailId: null })} onEdit={() => {}} />;
+    showHeader = false;
+  } else if (app.showInvite) {
+    content = <IEInviteSheet lang={L} onClose={() => set({ showInvite: false })} />;
+    showHeader = false; showTabBar = false;
+  } else if (app.screen === 'search') {
+    content = <IESearchScreen lang={L} app={app} set={set} />;
+  } else if (app.screen === 'detail') {
+    content = <IEDetailScreen itemId="i01" lang={L} onBack={() => set({ screen: 'search' })} onEdit={() => {}} />;
+    showHeader = false;
+  } else if (app.screen === 'add') {
+    content = <IEAddScreen lang={L} variant={app.addVariant} onDone={() => set({ screen: 'search' })} onBack={() => set({ screen: 'search' })} />;
+  } else if (app.screen === 'expiring') {
+    content = <IEExpiringScreen lang={L} variant={app.expiringVariant} onOpen={(id) => set({ detailId: id })} />;
+  } else if (app.screen === 'family') {
+    content = <IEFamilyScreen lang={L} app={app} onInvite={() => set({ showInvite: true })} onApprove={() => {}} />;
+  } else if (app.screen === 'invite') {
+    content = <IEInviteSheet lang={L} onClose={() => set({ screen: 'family' })} />;
+    showHeader = false; showTabBar = false;
+  } else if (app.screen === 'join') {
+    content = <IEJoinScreen lang={L} onSubmit={() => set({ screen: 'family' })} onBack={() => set({ screen: 'search' })} />;
+    showHeader = false;
+  } else if (app.screen === 'manage') {
+    content = <IEManageScreen lang={L} onOpen={(id) => set({ detailId: id })} onAdd={() => set({ screen: 'add' })} />;
+  } else if (app.screen === 'settings') {
+    content = <IESettingsScreen lang={L} app={app} set={set} />;
+  } else if (app.screen === 'notifs') {
+    content = <IENotificationsScreen lang={L} onOpen={(id) => set({ detailId: id })} />;
+  }
+
+  const activeTab = ['search','family','manage','settings'].includes(app.screen)
+    ? app.screen
+    : (app.screen === 'expiring' || app.screen === 'notifs' ? 'search'
+       : app.screen === 'join' || app.screen === 'invite' ? 'family'
+       : app.screen === 'add' ? 'manage' : 'search');
+
+  const inner = (
+    <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--ie-bg)' }}>
+      {showHeader && (
+        <div className="ie-screen-header">
+          <div>
+            <div className="ie-screen-title">{screenTitles[app.screen]?.[L] || screenTitles[app.screen]?.zh || ''}</div>
+            {app.screen === 'search' && (
+              <div className="ie-screen-subtitle">{L === 'en' ? 'What are you looking for today?' : '今天要找什麼呢？'}</div>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {app.screen !== 'notifs' && (
+              <button className="ie-circle-btn" onClick={() => set({ screen: 'notifs' })} style={{ position: 'relative' }}>
+                <IEIcon name="bell" size={18} />
+                <span style={{ position: 'absolute', top: 8, right: 8, width: 8, height: 8, borderRadius: 4, background: 'var(--ie-danger)', border: '2px solid var(--ie-surface)' }}/>
+              </button>
+            )}
+            {app.screen === 'family' && (
+              <button className="ie-circle-btn" onClick={() => set({ showInvite: true })}>
+                <IEIcon name="plus" size={18} />
+              </button>
+            )}
+            {app.screen === 'manage' && (
+              <button className="ie-circle-btn" onClick={() => set({ screen: 'add' })}>
+                <IEIcon name="plus" size={18} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+      <div style={{ flex: 1, overflowY: 'auto', background: 'var(--ie-bg)' }}>
+        {content}
+      </div>
+      {showTabBar && <IETabBar active={activeTab} onChange={(k) => set({ screen: k, detailId: null })} lang={L} />}
+    </div>
+  );
+
+  if (platform === 'ios') {
+    return <IOSDevice width={390} height={800} dark={app.theme === 'tech'}>{inner}</IOSDevice>;
+  } else {
+    return <AndroidDevice width={390} height={800} dark={app.theme === 'tech'}>{inner}</AndroidDevice>;
+  }
+}
+
+function Root() {
+  return (
+    <div className="frames-row">
+      <div className="frame-col">
+        <div className="frame-label">iOS</div>
+        <App platform="ios" />
+      </div>
+      <div className="frame-col">
+        <div className="frame-label">Android</div>
+        <App platform="android" />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+</script>
+
+</body>
+</html>

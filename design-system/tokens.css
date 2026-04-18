@@ -1,0 +1,149 @@
+/* ItemElf Design System — Tokens
+ * 4 themes: warm / playful / minimal / tech
+ * Switch by setting [data-theme] on <html> or any ancestor.
+ */
+
+:root,
+[data-theme='warm'] {
+  --ie-bg: #faf6f1;
+  --ie-surface: #ffffff;
+  --ie-surface-2: #f3ece3;
+  --ie-border: #e9dfd1;
+  --ie-text: #2a211a;
+  --ie-text-muted: #7a6a5c;
+  --ie-text-subtle: #a8978a;
+  --ie-primary: #b8764a;       /* warm terracotta */
+  --ie-primary-ink: #ffffff;
+  --ie-primary-soft: #f3e3d2;
+  --ie-accent: #6b8e5a;        /* sage */
+  --ie-accent-soft: #e3ecd9;
+  --ie-danger: #c25a45;
+  --ie-warning: #d99b4a;
+  --ie-success: #6b8e5a;
+  --ie-info: #5a80a3;
+  --ie-tab-active: var(--ie-primary);
+  --ie-elf-bg: #f3e3d2;
+  --ie-elf-ink: #b8764a;
+  --ie-shadow-sm: 0 1px 2px rgba(70, 45, 25, 0.05);
+  --ie-shadow: 0 2px 10px rgba(70, 45, 25, 0.08);
+  --ie-shadow-lg: 0 12px 40px rgba(70, 45, 25, 0.14);
+}
+
+[data-theme='playful'] {
+  --ie-bg: #fdf9f5;
+  --ie-surface: #ffffff;
+  --ie-surface-2: #fff2ea;
+  --ie-border: #f5dccb;
+  --ie-text: #2a1d23;
+  --ie-text-muted: #7a5a63;
+  --ie-text-subtle: #b99ca5;
+  --ie-primary: #e97a6a;       /* coral */
+  --ie-primary-ink: #ffffff;
+  --ie-primary-soft: #ffe1d9;
+  --ie-accent: #72b8a3;        /* mint */
+  --ie-accent-soft: #d6ede5;
+  --ie-danger: #d94a6a;
+  --ie-warning: #f2b23a;
+  --ie-success: #72b8a3;
+  --ie-info: #6a9ad9;
+  --ie-tab-active: var(--ie-primary);
+  --ie-elf-bg: #ffe1d9;
+  --ie-elf-ink: #e97a6a;
+  --ie-shadow-sm: 0 2px 4px rgba(230, 120, 100, 0.08);
+  --ie-shadow: 0 4px 16px rgba(230, 120, 100, 0.12);
+  --ie-shadow-lg: 0 16px 48px rgba(230, 120, 100, 0.18);
+}
+
+[data-theme='minimal'] {
+  --ie-bg: #f5f5f7;
+  --ie-surface: #ffffff;
+  --ie-surface-2: #ededef;
+  --ie-border: #e2e2e6;
+  --ie-text: #1c1c1e;
+  --ie-text-muted: #636366;
+  --ie-text-subtle: #a8a8aa;
+  --ie-primary: #1c1c1e;
+  --ie-primary-ink: #ffffff;
+  --ie-primary-soft: #e6e6e8;
+  --ie-accent: #0a84ff;
+  --ie-accent-soft: #d6e9ff;
+  --ie-danger: #d0342c;
+  --ie-warning: #e89a1e;
+  --ie-success: #2f9e66;
+  --ie-info: #0a84ff;
+  --ie-tab-active: var(--ie-primary);
+  --ie-elf-bg: #e6e6e8;
+  --ie-elf-ink: #1c1c1e;
+  --ie-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ie-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --ie-shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='tech'] {
+  --ie-bg: #0d0f14;
+  --ie-surface: #161a23;
+  --ie-surface-2: #1f2432;
+  --ie-border: #2a3040;
+  --ie-text: #e7ecf3;
+  --ie-text-muted: #9aa3b2;
+  --ie-text-subtle: #5a6272;
+  --ie-primary: #6ce3b8;       /* neon mint */
+  --ie-primary-ink: #0d0f14;
+  --ie-primary-soft: #1f3a32;
+  --ie-accent: #7ab8ff;
+  --ie-accent-soft: #1c2a3e;
+  --ie-danger: #ff6a6a;
+  --ie-warning: #ffc56a;
+  --ie-success: #6ce3b8;
+  --ie-info: #7ab8ff;
+  --ie-tab-active: var(--ie-primary);
+  --ie-elf-bg: #1f3a32;
+  --ie-elf-ink: #6ce3b8;
+  --ie-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --ie-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  --ie-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+:root {
+  --ie-radius-sm: 8px;
+  --ie-radius: 14px;
+  --ie-radius-lg: 22px;
+  --ie-radius-xl: 28px;
+
+  --ie-font: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --ie-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Status colors (persistent across themes, lightly shifted) */
+  --ie-status-new-bg: color-mix(in oklch, var(--ie-info) 18%, var(--ie-surface));
+  --ie-status-new-ink: var(--ie-info);
+  --ie-status-active-bg: color-mix(in oklch, var(--ie-success) 18%, var(--ie-surface));
+  --ie-status-active-ink: var(--ie-success);
+  --ie-status-expiring-bg: color-mix(in oklch, var(--ie-warning) 22%, var(--ie-surface));
+  --ie-status-expiring-ink: var(--ie-warning);
+  --ie-status-expired-bg: color-mix(in oklch, var(--ie-danger) 20%, var(--ie-surface));
+  --ie-status-expired-ink: var(--ie-danger);
+  --ie-status-finished-bg: var(--ie-surface-2);
+  --ie-status-finished-ink: var(--ie-text-muted);
+  --ie-status-discarded-bg: var(--ie-surface-2);
+  --ie-status-discarded-ink: var(--ie-text-subtle);
+  --ie-status-paused-bg: var(--ie-surface-2);
+  --ie-status-paused-ink: var(--ie-text-muted);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--ie-font);
+  color: var(--ie-text);
+  background: var(--ie-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utility: visually-hidden */
+.vh {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  width: 1px; height: 1px; overflow: hidden;
+}
