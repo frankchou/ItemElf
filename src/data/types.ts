@@ -51,6 +51,15 @@ export interface AppNotification {
   type: 'expiring' | 'added' | 'expired' | 'join';
   itemId?: string;
   text: string;
-  time: string;
-  actorId: string;
+  textEn: string;
+  date: string;   // YYYY-MM-DD for grouping
+  time: string;   // HH:MM for display
+  actorId: string; // 'elf' | 'system' | user id
+}
+
+export interface PendingApproval {
+  id: string;
+  name: string;
+  email: string;
+  requestedAt: string; // ISO date string
 }

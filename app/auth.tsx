@@ -12,7 +12,7 @@ export default function AuthRoute() {
 
   function handleDone() {
     set({ isLoggedIn: true });
-    router.replace('/(tabs)/');
+    router.replace('/(tabs)');
   }
 
   return (

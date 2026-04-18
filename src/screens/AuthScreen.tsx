@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert,
 } from 'react-native';
-import * as LocalAuthentication from 'expo-local-authentication';
+import { Platform } from 'react-native';
+const LocalAuthentication = Platform.OS !== 'web' ? require('expo-local-authentication') : null;
 import { useTheme, useLang, useApp } from '../context/AppContext';
 import { IEElf, IEButton, IEInput, IEIcon } from '../components';
 
@@ -36,6 +37,7 @@ export function AuthScreen({ onDone }: Props) {
   };
 
   async function handleBiometric() {
+    if (!LocalAuthentication) { handleSubmit(); return; }
     const supported = await LocalAuthentication.hasHardwareAsync();
     if (!supported) {
       Alert.alert(lang === 'en' ? 'Not supported' : '不支援', lang === 'en' ? 'Biometric not available' : '此裝置不支援生物辨識');

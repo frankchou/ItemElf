@@ -2,13 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme, useLang, useApp } from '../context/AppContext';
 import { IEElf, IEButton, IECard, IETag, IEIcon } from '../components';
-import { users, me, family } from '../data/mock';
+import { users, me, family, pendingApprovals } from '../data/mock';
 
-interface Props { onInvite: () => void; onApprove?: () => void }
+interface Props { onInvite: () => void; onApprove?: (id: string) => void; onReject?: (id: string) => void }
 
-const PENDING = [{ name: '陳阿姨', email: 'auntie@family.tw', time: '2 小時前' }];
-
-export function FamilyScreen({ onInvite, onApprove }: Props) {
+export function FamilyScreen({ onInvite, onApprove, onReject }: Props) {
   const t = useTheme();
   const lang = useLang();
   const { state } = useApp();
@@ -55,23 +53,23 @@ export function FamilyScreen({ onInvite, onApprove }: Props) {
       </View>
 
       {/* Pending */}
-      {PENDING.length > 0 && (
+      {pendingApprovals.length > 0 && (
         <View style={s.section}>
-          <Text style={[s.sectionLabel, { color: t.textMuted }]}>{T.pending} ({PENDING.length})</Text>
-          {PENDING.map(p => (
-            <IECard key={p.email} padding={14} style={{ marginBottom: 8, borderLeftWidth: 3, borderLeftColor: t.warning }}>
+          <Text style={[s.sectionLabel, { color: t.textMuted }]}>{T.pending} ({pendingApprovals.length})</Text>
+          {pendingApprovals.map(p => (
+            <IECard key={p.id} padding={14} style={{ marginBottom: 8, borderLeftWidth: 3, borderLeftColor: t.warning }}>
               <View style={s.memberRow}>
                 <View style={[s.avatar, { backgroundColor: t.warning }]}>
                   <Text style={s.avatarText}>{p.name[0]}</Text>
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={[s.memberName, { color: t.text }]}>{p.name}</Text>
-                  <Text style={[s.memberEmail, { color: t.textMuted }]}>{p.email} · {p.time}</Text>
+                  <Text style={[s.memberEmail, { color: t.textMuted }]}>{p.email} · {p.requestedAt}</Text>
                 </View>
               </View>
               <View style={s.approveRow}>
-                <View style={{ flex: 1 }}><IEButton variant="primary" size="sm" full onPress={onApprove}>{T.approve}</IEButton></View>
-                <View style={{ flex: 1 }}><IEButton variant="soft" size="sm" full>{T.reject}</IEButton></View>
+                <View style={{ flex: 1 }}><IEButton variant="primary" size="sm" full onPress={() => onApprove?.(p.id)}>{T.approve}</IEButton></View>
+                <View style={{ flex: 1 }}><IEButton variant="soft" size="sm" full onPress={() => onReject?.(p.id)}>{T.reject}</IEButton></View>
               </View>
             </IECard>
           ))}

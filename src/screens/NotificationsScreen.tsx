@@ -2,7 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme, useLang } from '../context/AppContext';
 import { IEElf } from '../components';
-import { users } from '../data/mock';
+import { notifications, userById } from '../data/mock';
+
+const TODAY = '2026-04-18';
+const YESTERDAY = '2026-04-17';
 
 interface Props { onOpenItem: (id: string) => void }
 
@@ -10,53 +13,63 @@ export function NotificationsScreen({ onOpenItem }: Props) {
   const t = useTheme();
   const lang = useLang();
 
-  const feed = lang === 'en' ? [
-    { group: 'Today', entries: [
-      { actor: 'elf', text: '🥛 Fresh Milk 1L will expire in 6 days. Shelf 2 in the fridge.', time: '08:12', itemId: 'i01' },
-      { actor: 'u2',  text: 'Added Fresh Milk 1L to Fridge · Shelf 2', time: '08:10', itemId: 'i01' },
-      { actor: 'elf', text: '🍞 White bread has expired — please check if you should discard it.', time: '09:00', itemId: 'i06' },
-    ]},
-    { group: 'Yesterday', entries: [
-      { actor: 'u3',     text: 'Added Yogurt drink x4 to Fridge · Lower shelf', time: '19:30', itemId: 'i08' },
-      { actor: 'system', text: '陳阿姨 requested to join your family', time: '14:02', itemId: undefined },
-    ]},
-  ] : [
-    { group: '今天', entries: [
-      { actor: 'elf', text: '🥛 鮮奶 1L 還有 6 天就到期了，在冰箱第二層。', time: '08:12', itemId: 'i01' },
-      { actor: 'u2',  text: '新增了「鮮奶 1L」到 冰箱 第二層', time: '08:10', itemId: 'i01' },
-      { actor: 'elf', text: '🍞 白吐司已過期，請確認是否丟棄。', time: '09:00', itemId: 'i06' },
-    ]},
-    { group: '昨天', entries: [
-      { actor: 'u3',     text: '新增了「優酪乳 四入」到 冰箱 下層', time: '19:30', itemId: 'i08' },
-      { actor: 'system', text: '陳阿姨 申請加入家族', time: '14:02', itemId: undefined },
-    ]},
-  ];
+  function dayLabel(date: string): string {
+    if (date === TODAY) return lang === 'en' ? 'Today' : '今天';
+    if (date === YESTERDAY) return lang === 'en' ? 'Yesterday' : '昨天';
+    return date;
+  }
+
+  // Group notifications by date
+  const grouped = notifications.reduce<Record<string, typeof notifications>>((acc, n) => {
+    const key = n.date;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(n);
+    return acc;
+  }, {});
+
+  const groups = Object.keys(grouped)
+    .sort((a, b) => b.localeCompare(a))
+    .map(date => ({ label: dayLabel(date), entries: grouped[date] }));
 
   function actorInfo(id: string) {
-    if (id === 'elf') return { name: 'ItemElf', color: t.primary };
-    if (id === 'system') return { name: lang === 'en' ? 'System' : '系統', color: t.textMuted };
-    const u = users.find(u => u.id === id);
-    return u ? { name: u.name, color: u.avatar } : { name: '—', color: '#ccc' };
+    if (id === 'elf' || id === 'system') return { name: 'ItemElf', color: t.primary, isElf: true };
+    const u = userById(id);
+    return { name: u.name || '—', color: u.avatar || '#ccc', isElf: false };
+  }
+
+  if (groups.length === 0) {
+    return (
+      <View style={[s.empty, { backgroundColor: t.bg }]}>
+        <IEElf size={72} mood="sleepy" />
+        <Text style={[s.emptyTitle, { color: t.text }]}>
+          {lang === 'en' ? 'No notifications yet' : '目前沒有通知'}
+        </Text>
+        <Text style={[s.emptyBody, { color: t.textMuted }]}>
+          {lang === 'en'
+            ? "When items expire or family members make changes, you'll see updates here."
+            : '當物品快到期或家族成員有異動時，通知會顯示在這裡。'}
+        </Text>
+      </View>
+    );
   }
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: t.bg }} contentContainerStyle={s.content}>
-      {feed.map(g => (
-        <View key={g.group} style={s.group}>
-          <Text style={[s.groupLabel, { color: t.textMuted }]}>{g.group}</Text>
+      {groups.map(g => (
+        <View key={g.label} style={s.group}>
+          <Text style={[s.groupLabel, { color: t.textMuted }]}>{g.label}</Text>
           <View style={{ gap: 10 }}>
-            {g.entries.map((e, i) => {
-              const a = actorInfo(e.actor);
-              const isElf = e.actor === 'elf';
+            {g.entries.map(n => {
+              const a = actorInfo(n.actorId);
               return (
                 <TouchableOpacity
-                  key={i}
-                  onPress={() => e.itemId && onOpenItem(e.itemId)}
-                  disabled={!e.itemId}
+                  key={n.id}
+                  onPress={() => n.itemId && onOpenItem(n.itemId)}
+                  disabled={!n.itemId}
                   activeOpacity={0.8}
                   style={s.entry}
                 >
-                  {isElf
+                  {a.isElf
                     ? <IEElf size={32} />
                     : (
                       <View style={[s.avatar, { backgroundColor: a.color }]}>
@@ -67,13 +80,15 @@ export function NotificationsScreen({ onOpenItem }: Props) {
                   <View style={{ flex: 1 }}>
                     <View style={s.metaRow}>
                       <Text style={[s.actorName, { color: t.textMuted }]}>{a.name}</Text>
-                      <Text style={[s.time, { color: t.textMuted }]}>{e.time}</Text>
+                      <Text style={[s.time, { color: t.textMuted }]}>{n.time}</Text>
                     </View>
                     <View style={[
                       s.bubble,
-                      { backgroundColor: isElf ? t.primarySoft : t.surface, borderColor: isElf ? 'transparent' : t.border, borderWidth: isElf ? 0 : 1 },
+                      { backgroundColor: a.isElf ? t.primarySoft : t.surface, borderColor: a.isElf ? 'transparent' : t.border, borderWidth: a.isElf ? 0 : 1 },
                     ]}>
-                      <Text style={[s.bubbleText, { color: t.text }]}>{e.text}</Text>
+                      <Text style={[s.bubbleText, { color: t.text }]}>
+                        {lang === 'en' ? n.textEn : n.text}
+                      </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -98,4 +113,7 @@ const s = StyleSheet.create({
   time:       { fontSize: 11 },
   bubble:     { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 16, borderTopLeftRadius: 4, alignSelf: 'flex-start', maxWidth: '85%' },
   bubbleText: { fontSize: 13, lineHeight: 20 },
+  empty:      { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 40, gap: 12 },
+  emptyTitle: { fontSize: 17, fontWeight: '700', textAlign: 'center' },
+  emptyBody:  { fontSize: 14, lineHeight: 22, textAlign: 'center' },
 });

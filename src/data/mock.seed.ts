@@ -1,4 +1,4 @@
-import { User, Category, Item, Family, AppNotification, PendingApproval } from './types';
+import { User, Category, Item, Family, AppNotification } from './types';
 
 export const users: User[] = [
   { id: 'u1', name: '', role: 'owner', avatar: '#b8764a', email: '' },
@@ -30,8 +30,6 @@ export const family: Family = {
 };
 
 export const notifications: AppNotification[] = [];
-
-export const pendingApprovals: PendingApproval[] = [];
 
 export function userById(id: string): User {
   return users.find(u => u.id === id) ?? { id: '?', name: '—', role: 'member', avatar: '#ccc', email: '' };
