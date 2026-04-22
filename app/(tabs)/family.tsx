@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme, useLang } from '../../src/context/AppContext';
+import { useTheme, useLang, useApp } from '../../src/context/AppContext';
 import { FamilyScreen } from '../../src/screens/FamilyScreen';
 import { IEIcon } from '../../src/components';
 
@@ -9,6 +9,7 @@ export default function FamilyTab() {
   const router = useRouter();
   const t = useTheme();
   const lang = useLang();
+  const { state } = useApp();
   const insets = useSafeAreaInsets();
 
   return (
@@ -16,7 +17,8 @@ export default function FamilyTab() {
       <View style={[s.header, { paddingTop: insets.top + 10, backgroundColor: t.bg }]}>
         <Text style={[s.title, { color: t.text }]}>{lang === 'en' ? 'Family' : '家族'}</Text>
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <TouchableOpacity onPress={() => router.push('/invite')}
+          <TouchableOpacity
+            onPress={() => router.push(state.family ? '/invite' : ('/create-family' as any))}
             style={[s.circleBtn, { backgroundColor: t.surface, borderColor: t.border }]}>
             <IEIcon name="plus" size={18} color={t.text} />
           </TouchableOpacity>

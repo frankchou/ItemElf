@@ -1,21 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { useTheme, useLang } from '../context/AppContext';
+import { useTheme, useLang, useApp } from '../context/AppContext';
 import { IEElf, IEButton } from '../components';
-import { family } from '../data/mock';
 
 interface Props { onClose: () => void }
 
 export function InviteScreen({ onClose }: Props) {
   const t = useTheme();
   const lang = useLang();
+  const { state } = useApp();
+  const family = state.family;
 
   const T = lang === 'en'
     ? { title: 'Invite to family', scan: 'Scan to join', id: 'Family ID', copy: 'Copy link', close: 'Done' }
     : { title: '邀請加入家族', scan: '掃描加入家族', id: '家族編號', copy: '複製連結', close: '完成' };
 
-  const qrValue = `itemelf://join?id=${family.id}`;
+  const qrValue = `itemelf://join?id=${family?.id ?? ''}`;
 
   return (
     <View style={[s.container, { backgroundColor: t.bg }]}>
@@ -29,7 +30,6 @@ export function InviteScreen({ onClose }: Props) {
           size={200}
           color="#000"
           backgroundColor="#fff"
-          logo={{ uri: '' }}
         />
         <View style={s.qrOverlay}>
           <IEElf size={40} />
@@ -38,12 +38,12 @@ export function InviteScreen({ onClose }: Props) {
 
       <View style={s.idBlock}>
         <Text style={[s.idLabel, { color: t.textMuted }]}>{T.id}</Text>
-        <Text style={[s.idValue, { color: t.text }]}>{family.id}</Text>
+        <Text style={[s.idValue, { color: t.text }]}>{family?.id ?? '—'}</Text>
       </View>
 
       <View style={s.actions}>
-        <IEButton variant="soft" full size="md">{T.copy}</IEButton>
-        <IEButton variant="primary" full size="md" onPress={onClose}>{T.close}</IEButton>
+        <View style={{ flex: 1 }}><IEButton variant="soft" full size="md">{T.copy}</IEButton></View>
+        <View style={{ flex: 1 }}><IEButton variant="primary" full size="md" onPress={onClose}>{T.close}</IEButton></View>
       </View>
     </View>
   );

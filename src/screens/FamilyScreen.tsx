@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme, useLang, useApp } from '../context/AppContext';
 import { IEElf, IEButton, IECard, IETag, IEIcon } from '../components';
-import { users, me, family, pendingApprovals } from '../data/mock';
+import { users, me, pendingApprovals } from '../data/mock';
 
 interface Props { onInvite: () => void; onApprove?: (id: string) => void; onReject?: (id: string) => void }
 
@@ -10,6 +10,7 @@ export function FamilyScreen({ onInvite, onApprove, onReject }: Props) {
   const t = useTheme();
   const lang = useLang();
   const { state } = useApp();
+  const family = state.family;
   const isOwner = state.role === 'owner';
 
   const T = lang === 'en' ? {
@@ -27,8 +28,8 @@ export function FamilyScreen({ onInvite, onApprove, onReject }: Props) {
   };
 
   const policies = [
-    [T.invitePolicy, family.memberInvitePolicy === 'owner-only' ? T.ownerOnly : T.any],
-    [T.approvePolicy, family.memberApprovePolicy === 'owner-only' ? T.ownerOnly : T.any],
+    [T.invitePolicy, family?.memberInvitePolicy === 'owner-only' ? T.ownerOnly : T.any],
+    [T.approvePolicy, family?.memberApprovePolicy === 'owner-only' ? T.ownerOnly : T.any],
   ];
 
   return (
@@ -39,8 +40,8 @@ export function FamilyScreen({ onInvite, onApprove, onReject }: Props) {
           <View style={s.headerRow}>
             <IEElf size={52} />
             <View style={{ flex: 1 }}>
-              <Text style={[s.famName, { color: t.text }]}>{family.name}</Text>
-              <Text style={[s.famId, { color: t.textMuted }]}>{T.famId} · {family.id}</Text>
+              <Text style={[s.famName, { color: t.text }]}>{family?.name ?? '—'}</Text>
+              <Text style={[s.famId, { color: t.textMuted }]}>{T.famId} · {family?.id ?? '—'}</Text>
             </View>
           </View>
           <View style={s.headerActions}>

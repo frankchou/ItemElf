@@ -23,7 +23,8 @@ function RootNavigator() {
         <Stack.Screen name="add"           options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="expiring"      options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="notifications" options={{ animation: 'slide_from_right' }} />
-        <Stack.Screen name="invite"        options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="invite"         options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="create-family" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="join"          options={{ animation: 'slide_from_right' }} />
       </Stack>
     </>

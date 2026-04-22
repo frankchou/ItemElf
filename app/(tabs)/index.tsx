@@ -12,8 +12,12 @@ export default function SearchTab() {
   const { state } = useApp();
   const insets = useSafeAreaInsets();
 
-  const titles = { zh: '哈囉 大華', en: 'Hi, Dahua' };
-  const subs   = { zh: '今天要找什麼呢？', en: 'What are you looking for today?' };
+  const userName = state.currentUser?.name ?? '';
+  const titles = {
+    zh: userName ? `哈囉 ${userName}` : '哈囉！',
+    en: userName ? `Hi, ${userName}` : 'Hi there!',
+  };
+  const subs = { zh: '今天要找什麼呢？', en: 'What are you looking for today?' };
 
   return (
     <View style={{ flex: 1, backgroundColor: t.bg }}>

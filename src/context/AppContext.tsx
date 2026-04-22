@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { ThemeName, ThemeTokens, themes } from '../theme/tokens';
+import { Family } from '../data/types';
 
 export type Lang = 'zh' | 'en';
 export type UserRole = 'owner' | 'member';
@@ -7,6 +8,13 @@ export type ViewScope = 'family' | 'personal';
 export type SearchVariant = 'list' | 'card';
 export type AddVariant = 'single' | 'step';
 export type ExpiringVariant = 'timeline' | 'badge';
+
+export interface CurrentUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string; // hex color
+}
 
 export interface AppState {
   theme: ThemeName;
@@ -17,6 +25,8 @@ export interface AppState {
   addVariant: AddVariant;
   expiringVariant: ExpiringVariant;
   isLoggedIn: boolean;
+  currentUser: CurrentUser | null;
+  family: Family | null;
 }
 
 interface AppContextType {
@@ -34,6 +44,8 @@ const defaultState: AppState = {
   addVariant: 'single',
   expiringVariant: 'timeline',
   isLoggedIn: false,
+  currentUser: null,
+  family: null,
 };
 
 const AppContext = createContext<AppContextType>({

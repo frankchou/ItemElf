@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import { useTheme, useLang, useApp } from '../context/AppContext';
 import { IEButton, IECard, IEIcon } from '../components';
-import { me } from '../data/mock';
 
 interface Props { onLogout: () => void }
 
@@ -49,12 +48,12 @@ export function SettingsScreen({ onLogout }: Props) {
       {/* Profile */}
       <IECard padding={16} style={s.profileCard}>
         <View style={s.profileRow}>
-          <View style={[s.profileAvatar, { backgroundColor: me.avatar }]}>
-            <Text style={s.profileInitial}>{me.name[0]}</Text>
+          <View style={[s.profileAvatar, { backgroundColor: state.currentUser?.avatar ?? t.primary }]}>
+            <Text style={s.profileInitial}>{(state.currentUser?.name ?? '?')[0]}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={[s.profileName, { color: t.text }]}>{me.name}</Text>
-            <Text style={[s.profileEmail, { color: t.textMuted }]}>{me.email}</Text>
+            <Text style={[s.profileName, { color: t.text }]}>{state.currentUser?.name ?? '—'}</Text>
+            <Text style={[s.profileEmail, { color: t.textMuted }]}>{state.currentUser?.email ?? '—'}</Text>
           </View>
           <IEButton variant="soft" size="sm">{T.edit}</IEButton>
         </View>
